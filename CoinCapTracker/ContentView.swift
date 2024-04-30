@@ -6,16 +6,26 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \CoinEntity.mk, ascending: false)],
+        animation: .default//,
+//        predicate: NSPredicate(format: "name LIKE %@", "*Bitcoin*"), animation: .default
+    )
+    
+    private var coins: FetchedResults<CoinEntity>
     
 //    @State private var titleOn = true // из задачи 2
     
     var body: some View {
         TabView {
-            
-//            TestView(titleOn: $titleOn)
-            CoinView()
+        
+            CoinView(coins: coins)
                 .tabItem {
                     Label("Coins", systemImage: "bitcoinsign.circle")
                 }
@@ -26,7 +36,7 @@ struct ContentView: View {
                 }
             
 //            SettingsView(titleOn: $titleOn)
-            SettingsView()
+            SettingsView(coins: coins)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }

@@ -14,8 +14,11 @@ final class DatabaseService {
     let container: NSPersistentContainer
     let viewContext: NSManagedObjectContext
     
-    private init() {
+    private init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "CoinsModel")
+        if inMemory {
+            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Неизвестная ошибка \(error), \(error.userInfo)")

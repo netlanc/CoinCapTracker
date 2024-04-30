@@ -17,7 +17,7 @@ struct CoinCapTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, databaseService.viewContext)
+                .environment(\.managedObjectContext, databaseService.container.viewContext)
             
                 .onAppear {
                     
@@ -27,6 +27,7 @@ struct CoinCapTrackerApp: App {
                     
                     Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
                         
+                        
                         let coins = DatabaseService.shared.getAllCoins()
                         
                         // строка дла получения данных по id монет
@@ -34,7 +35,7 @@ struct CoinCapTrackerApp: App {
                         let ids = coins.map { String($0.id) }
                         urlString += "[" + ids.joined(separator: ",") + "]"
                         
-//                        print("urlString", urlString)
+                        print("urlString", urlString)
                         
                         NetworkService.shared.loadCoinData(urlString) { coinDataArray, error in
                             
@@ -42,12 +43,15 @@ struct CoinCapTrackerApp: App {
                                 
                             } else if let coinDataArray = coinDataArray {
                                 
-                                // Если данные получены успешно, обноаляем их в БД
-                                for coinData in coinDataArray {
-                                    DatabaseService.shared.addCoin(data: coinData)
+                                withAnimation {
+                                    // Если данные получены успешно, обноаляем их в БД
+                                    for coinData in coinDataArray {
+                                        databaseService.addCoin(data: coinData)
+                                    }
                                 }
                             }
                         }
+                        
                     }
                     
                 }

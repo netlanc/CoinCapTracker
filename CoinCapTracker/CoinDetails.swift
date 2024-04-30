@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct CoinDetails: View {
-    @State private var coinImage: UIImage? // Состояние для хранения загруженного изображения
-    @State private var isLoadingImage = false // Состояние для отслеживания процесса загрузки
-
+    @State private var coinImage: UIImage?
+    @State private var isLoadingImage = false 
+    
+    @FetchRequest(entity: CoinEntity.entity(), sortDescriptors: []) var coins: FetchedResults<CoinEntity>
     var coin: CoinEntity
     
     var body: some View {

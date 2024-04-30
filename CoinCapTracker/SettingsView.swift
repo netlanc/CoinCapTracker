@@ -18,13 +18,7 @@ struct SettingsView: View {
     @AppStorage("selectedTheme") var selectedTheme = 0
     @State private var sliderValue = 50.0
     
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \CoinEntity.mk, ascending: false)]//,
-        //        predicate: NSPredicate(format: "name LIKE %@", "*Bitcoin*"), animation: .default
-    )
-    
-    private var coins: FetchedResults<CoinEntity>
+    var coins: FetchedResults<CoinEntity>
     
     var body: some View {
         
@@ -63,6 +57,28 @@ struct SettingsView: View {
                         }
                     }
                 }
+                
+                Section(header: Text("Найденные монеты")) {
+                    
+                        List(coins, id: \.self) { coin in
+                            let id = coin.id
+                                HStack {
+                                    Button(action: {
+                                    }) {
+                                        Image(systemName: "plus.circle.fill")
+                                            .foregroundColor(.green)
+                                    }
+                                    HStack {
+                                        Text("\(coin.name)")
+                                        Spacer()
+                                        Text((coin.currency != 0) ? "$ \(coin.currency)" : "-")
+                                            .fixedSize(horizontal: true, vertical: false)
+                                    }
+                                }
+                            
+                        }
+                    
+                }
             }
             .navigationTitle("Настройки")
             
@@ -85,6 +101,6 @@ struct SettingsView: View {
     
 }
 
-#Preview {
-    SettingsView()
-}
+//#Preview {
+//    SettingsView()
+//}
