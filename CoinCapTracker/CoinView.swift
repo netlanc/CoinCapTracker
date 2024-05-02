@@ -34,7 +34,7 @@ struct CoinView: View {
                 }
                 .navigationTitle(titleOn ? "Монеты":"")
             } else {
-                Text("Монеты пока не добавлены, перейдите в натройки что бы добавить монтеы")
+                Text("Монеты пока не добавлены, перейдите в настройки что бы добавить монеты")
                     .multilineTextAlignment(.center)
                 
             }
